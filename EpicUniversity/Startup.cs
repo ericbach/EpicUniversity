@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EpicUniversity.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace EpicUniversity
 {
@@ -25,6 +27,10 @@ namespace EpicUniversity
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<UniversityContext>(o =>
+                o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                //o.UseSqlServer(Configuration.GetValue<string>("ConnectionStrings:DefaultConnection")));
+
             services.AddControllers();
         }
 
