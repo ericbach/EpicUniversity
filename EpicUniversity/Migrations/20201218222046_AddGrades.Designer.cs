@@ -4,14 +4,16 @@ using EpicUniversity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EpicUniversity.Migrations
 {
     [DbContext(typeof(UniversityContext))]
-    partial class UniversityContextModelSnapshot : ModelSnapshot
+    [Migration("20201218222046_AddGrades")]
+    partial class AddGrades
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,7 +100,7 @@ namespace EpicUniversity.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Gpa")
-                        .HasColumnType("decimal(2,1)");
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<long?>("StudentId")
                         .HasColumnType("bigint");
@@ -159,8 +161,8 @@ namespace EpicUniversity.Migrations
                 {
                     b.HasBaseType("EpicUniversity.Models.Personnel");
 
-                    b.Property<decimal>("Gpa")
-                        .HasColumnType("decimal(2,1)");
+                    b.Property<decimal>("Grade")
+                        .HasColumnType("decimal(5,2)");
 
                     b.HasDiscriminator().HasValue("Student");
                 });

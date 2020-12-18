@@ -1,38 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Eventing.Reader;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace EpicUniversity.Models
 {
-    // POCO = Plain Old CLR Objects
-    public class Course
+    public class Course : Entity
     {
-        public long Id { get; set; }
+        public string Name { get; set; }
+        public int Credits { get; set; }
+
+        // one-to-one relationship
+        public CourseLab CourseLab { get; set; }
+
+        // many-to-many relationship
+        public IList<Student> Students { get; set; } = new List<Student>();
+
+        // one-to-many relationship
+        public Professor Professor { get; set; }
+
+        public IList<Grade> Grades { get; set; }
+    }
+
+    public class CourseLab : Entity
+    {
         public string Name { get; set; }
 
-        public IList<Student> Students { get; set; } = new List<Student>();
-        public Professor Professor { get; set; }
-    }
-
-    public class Personnel
-    {
-        public long Id { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public DateTime Birthdate { get; set; }
-    }
-
-    public class Student : Personnel
-    {
-        public IList<Course> Courses { get; set; } = new List<Course>();
-    }
-
-    public class Professor : Personnel
-    {
-        public int Tenure { get; set; }
-        public int ParkingSpot { get; set; }
-        public IList<Course> Courses { get; set; } = new List<Course>();
+        public long CourseId { get; set; }
+        public Course Course { get; set; }
     }
 }

@@ -4,14 +4,16 @@ using EpicUniversity.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EpicUniversity.Migrations
 {
     [DbContext(typeof(UniversityContext))]
-    partial class UniversityContextModelSnapshot : ModelSnapshot
+    [Migration("20201217223635_AddedCreateDate")]
+    partial class AddedCreateDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,34 +86,6 @@ namespace EpicUniversity.Migrations
                     b.ToTable("CourseLabs");
                 });
 
-            modelBuilder.Entity("EpicUniversity.Models.Grade", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .UseIdentityColumn();
-
-                    b.Property<long?>("CourseId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("Gpa")
-                        .HasColumnType("decimal(2,1)");
-
-                    b.Property<long?>("StudentId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Grades");
-                });
-
             modelBuilder.Entity("EpicUniversity.Models.Personnel", b =>
                 {
                     b.Property<long>("Id")
@@ -159,9 +133,6 @@ namespace EpicUniversity.Migrations
                 {
                     b.HasBaseType("EpicUniversity.Models.Personnel");
 
-                    b.Property<decimal>("Gpa")
-                        .HasColumnType("decimal(2,1)");
-
                     b.HasDiscriminator().HasValue("Student");
                 });
 
@@ -200,36 +171,14 @@ namespace EpicUniversity.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("EpicUniversity.Models.Grade", b =>
-                {
-                    b.HasOne("EpicUniversity.Models.Course", "Course")
-                        .WithMany("Grades")
-                        .HasForeignKey("CourseId");
-
-                    b.HasOne("EpicUniversity.Models.Student", "Student")
-                        .WithMany("Grades")
-                        .HasForeignKey("StudentId");
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("EpicUniversity.Models.Course", b =>
                 {
                     b.Navigation("CourseLab");
-
-                    b.Navigation("Grades");
                 });
 
             modelBuilder.Entity("EpicUniversity.Models.Professor", b =>
                 {
                     b.Navigation("Courses");
-                });
-
-            modelBuilder.Entity("EpicUniversity.Models.Student", b =>
-                {
-                    b.Navigation("Grades");
                 });
 #pragma warning restore 612, 618
         }
