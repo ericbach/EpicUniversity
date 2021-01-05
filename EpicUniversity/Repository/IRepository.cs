@@ -4,6 +4,7 @@ namespace EpicUniversity.Repository
 {
     public interface IRepository<TEntity> where TEntity : class
     {
-        ICollection<TEntity> GetAll();
+        TEntity Get(long id);               // Course Get(long id);
+        ICollection<TEntity> GetAll();      // ICollection<Course> GetAll();
     }
 }

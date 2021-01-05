@@ -20,6 +20,18 @@ namespace EpicUniversity.Controllers
             CourseRepository = courseRepository;
         }
 
+        // localhost/course/1
+        [HttpGet("{id}")]
+        public ActionResult<Course> Get([FromRoute]long id)
+        {
+            var course = CourseRepository.Get(id);
+
+            if (course == null)
+                return NotFound();
+            
+            return Ok(CourseRepository.Get(id));
+        }
+
         // localhost/course/
         [HttpGet()]
         public ActionResult<List<Course>> GetAll()
