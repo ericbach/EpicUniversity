@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EpicUniversity.Data
 {
-    public class UniversityContext : DbContext
+    public class UniversityContext : DbContext // == Unit of Work
     {
         public UniversityContext(DbContextOptions<UniversityContext> options) : base(options)
         {

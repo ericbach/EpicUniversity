@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EpicUniversity.Data;
 using EpicUniversity.Models;
+using EpicUniversity.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace EpicUniversity
@@ -25,9 +27,12 @@ namespace EpicUniversity
         {
             services.AddDbContext<UniversityContext>(o =>
                 o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-                //o.UseSqlServer(Configuration.GetValue<string>("ConnectionStrings:DefaultConnection")));
 
             services.AddControllers();
+
+            // Spring.NET - Services.xml, WebPages.xml, Dao.xml, etc.
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            //RegisterServices(services, typeof(Repository<>), typeof(IRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +57,21 @@ namespace EpicUniversity
                 endpoints.MapControllers();
             });
         }
+
+        public static void RegisterServices(IServiceCollection services, Type baseClass, Type baseInterface)
+        {
+            services.Scan(scan => scan
+                .FromAssemblies(baseClass.GetTypeInfo().Assembly)
+                .AddClasses(classes => classes.Where(x =>
+                {
+                    var allInterfaces = x.GetInterfaces();
+                    return allInterfaces.Any(y => y.GetTypeInfo().IsGenericType &&
+                                                  y.GetTypeInfo().GetGenericTypeDefinition() == baseInterface);
+                }))
+                .AsImplementedInterfaces()
+                .WithScopedLifetime()
+            );
+        }
     }
 
     public static class UniversityContextMigrateAndSeed
@@ -75,10 +95,14 @@ namespace EpicUniversity
                 Name = "Epic programming",
                 Credits = 2
             };
-            
+
             // EF
             context.Courses.Add(course);
             context.SaveChanges();
         }
+
+        // Unit of Work - single transaction that can involve many operations
+        // Repository Pattern - dealing database actions - insert/update/delete
+
     }
 }
