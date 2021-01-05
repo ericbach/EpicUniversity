@@ -30,9 +30,9 @@ namespace EpicUniversity
 
             services.AddControllers();
 
-            // Services.xml, WebPages.xml, Dao.xml, etc.
-            RegisterServices(services, typeof(Repository<>), typeof(IRepository<>));
-            //services.AddScoped<IRepository<Course>, Repository<Course>>();
+            // Spring.NET - Services.xml, WebPages.xml, Dao.xml, etc.
+            services.AddScoped<ICourseRepository, CourseRepository>();
+            //RegisterServices(services, typeof(Repository<>), typeof(IRepository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

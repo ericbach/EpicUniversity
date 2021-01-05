@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using EpicUniversity.Data;
 using EpicUniversity.Models;
 using EpicUniversity.Repository;
@@ -10,13 +8,13 @@ using EpicUniversity.Repository;
 namespace EpicUniversity.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]")] // [Route("course")]
     public class CourseController : Controller
     {
         public UniversityContext Context;
-        public IRepository<Course> CourseRepository;
+        public ICourseRepository CourseRepository;
 
-        public CourseController(UniversityContext context, IRepository<Course> courseRepository)
+        public CourseController(UniversityContext context, ICourseRepository courseRepository)
         {
             Context = context;
             CourseRepository = courseRepository;
