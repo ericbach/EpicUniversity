@@ -82,23 +82,27 @@ namespace EpicUniversity
             using var context = serviceScope.ServiceProvider.GetService<UniversityContext>();
 
             // Ensure database is created
+            //context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             // Ensure any pending migrations are applied
             if (context.Database.GetPendingMigrations().Any())
                 context.Database.Migrate();
 
-            // Seed test data in database
-            var course = new Course
+            if (!context.Courses.Any(c => c.Name == "Epic programming"))
             {
-                CreatedDate = DateTime.Today,
-                Name = "Epic programming",
-                Credits = 2
-            };
+                // Seed test data in database
+                var course = new Course
+                {
+                    CreatedDate = DateTime.Today,
+                    Name = "Epic programming",
+                    Credits = 2
+                };
 
-            // EF
-            context.Courses.Add(course);
-            context.SaveChanges();
+                // EF
+                context.Courses.Add(course);
+                context.SaveChanges();
+            }
         }
 
         // Unit of Work - single transaction that can involve many operations
