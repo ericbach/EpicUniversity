@@ -51,7 +51,9 @@ namespace EpicUniversity.Controllers
         [HttpPost]
         public IActionResult Create([FromBody]Course courseDetails)
         {
-            Context.Courses.Add(courseDetails); // insert into Courses(Id, Name, etc) values(courseDetails.Id, courseDetails.Name, etc)
+            CourseRepository.Add(courseDetails);
+            //Context.Courses.Add(courseDetails); // insert into Courses(Id, Name, etc) values(courseDetails.Id, courseDetails.Name, etc)
+            
             Context.SaveChanges();
 
             return Ok();

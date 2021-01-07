@@ -30,6 +30,8 @@ namespace EpicUniversity
 
             services.AddControllers();
 
+            services.AddSwaggerGen();
+
             // Spring.NET - Services.xml, WebPages.xml, Dao.xml, etc.
             services.AddScoped<ICourseRepository, CourseRepository>();
             //RegisterServices(services, typeof(Repository<>), typeof(IRepository<>));
@@ -45,6 +47,13 @@ namespace EpicUniversity
                 // Seed database
                 app.MigrateAndSeedData();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Epic Univesity");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseHttpsRedirection();
 
@@ -83,7 +92,7 @@ namespace EpicUniversity
 
             // Ensure database is created
             //context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+            //context.Database.EnsureCreated();
 
             // Ensure any pending migrations are applied
             if (context.Database.GetPendingMigrations().Any())
