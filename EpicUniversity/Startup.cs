@@ -112,6 +112,51 @@ namespace EpicUniversity
                 context.Courses.Add(course);
                 context.SaveChanges();
             }
+
+            if (!context.CourseLabs.Any(c => c.Name == "Epic programming lab"))
+            {
+                var courseLab = new CourseLab
+                {
+                    CreatedDate = DateTime.Today,
+                    Name = "Epic programming lab",
+                    CourseId = 1
+                };
+
+                context.CourseLabs.Add(courseLab);
+                context.SaveChanges();
+            }
+
+            if (!context.Personnel.Any(p => p.Id == 1))
+            {
+                // Seed test data in database
+                var professor = new Professor
+                {
+                    CreatedDate = DateTime.Today,
+                    FirstName = "Amy",
+                    LastName = "TestP",
+                    Birthdate = DateTime.Today
+                };
+
+                // EF
+                context.Personnel.Add(professor);
+                context.SaveChanges();
+            }
+
+            if (!context.Personnel.Any(p => p.Id == 2))
+            {
+                // Seed test data in database
+                var student = new Student
+                {
+                    CreatedDate = DateTime.Today,
+                    FirstName = "Sor",
+                    LastName = "TestS",
+                    Birthdate = DateTime.Today
+                };
+
+                // EF
+                context.Personnel.Add(student);
+                context.SaveChanges();
+            }
         }
 
         // Unit of Work - single transaction that can involve many operations
