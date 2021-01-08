@@ -102,7 +102,6 @@ namespace EpicUniversity
 
             // Seed course test data in database
 
-
             var courses = new Course[6];
             courses[0] = new Course
             {
@@ -142,9 +141,6 @@ namespace EpicUniversity
                 Credits = 3
             };
 
-
-            // EF
-
             foreach (Course c in courses)
             {
                 if (!context.Courses.Any(x => x.Name == c.Name))
@@ -157,7 +153,25 @@ namespace EpicUniversity
 
             #endregion Courses Data
 
+            #region Course Labs Data
+          
+            if (!context.CourseLabs.Any(c => c.Name == "Epic programming lab"))
+            {
+                var courseLab = new CourseLab
+                {
+                    CreatedDate = DateTime.Today,
+                    Name = "Epic programming lab",
+                    CourseId = 1
+                };
+
+                context.CourseLabs.Add(courseLab);
+                context.SaveChanges();
+            }
+
+            #endregion Course Labs Data
+
             #region student data
+
             var students = new Student[8];
             students[0] = new Student
             {
@@ -231,6 +245,14 @@ namespace EpicUniversity
                 Gpa = 5.0M
 
             };
+            students[8] = new Student
+            {
+                CreatedDate = DateTime.Today,
+                FirstName = "Sor",
+                LastName = "TestS",
+                Birthdate = DateTime.Today,
+            };
+            
             foreach (Student s in students)
             {
                 if (!context.Students.Any(x => x.FirstName == s.FirstName))
@@ -243,6 +265,7 @@ namespace EpicUniversity
             #endregion student data
 
             #region Professor data
+
             var professors = new Professor[4];
             professors[0] = new Professor
             {
@@ -277,8 +300,15 @@ namespace EpicUniversity
                 LastName = "Codd",
                 ParkingSpot = 4,
                 Tenure = 25
-
             };
+            professors[4] = new Professor
+            {
+                CreatedDate = DateTime.Today,
+                FirstName = "Amy",
+                LastName = "TestP",
+                Birthdate = DateTime.Today
+            };
+            
             foreach (Professor p in professors)
             {
                 if (!context.Professors.Any(x => x.FirstName == p.FirstName))
@@ -287,58 +317,10 @@ namespace EpicUniversity
                 }
             }
 
-            if (!context.CourseLabs.Any(c => c.Name == "Epic programming lab"))
-            {
-                var courseLab = new CourseLab
-                {
-                    CreatedDate = DateTime.Today,
-                    Name = "Epic programming lab",
-                    CourseId = 1
-                };
-
-                context.CourseLabs.Add(courseLab);
-                context.SaveChanges();
-            }
-
-            if (!context.Personnel.Any(p => p.Id == 1))
-            {
-                // Seed test data in database
-                var professor = new Professor
-                {
-                    CreatedDate = DateTime.Today,
-                    FirstName = "Amy",
-                    LastName = "TestP",
-                    Birthdate = DateTime.Today
-                };
-
-                // EF
-                context.Personnel.Add(professor);
-                context.SaveChanges();
-            }
-
-            if (!context.Personnel.Any(p => p.Id == 2))
-            {
-                // Seed test data in database
-                var student = new Student
-                {
-                    CreatedDate = DateTime.Today,
-                    FirstName = "Sor",
-                    LastName = "TestS",
-                    Birthdate = DateTime.Today
-                };
-
-                // EF
-                context.Personnel.Add(student);
-                context.SaveChanges();
-            }
-            context.SaveChanges();
-
             #endregion professors data
-
         }
 
         // Unit of Work - single transaction that can involve many operations
         // Repository Pattern - dealing database actions - insert/update/delete
-
     }
 }
