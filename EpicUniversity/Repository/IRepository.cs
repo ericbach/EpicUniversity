@@ -6,5 +6,7 @@ namespace EpicUniversity.Repository
     {
         TEntity Get(long id);               // Course Get(long id);
         ICollection<TEntity> GetAll();      // ICollection<Course> GetAll();
+
+        void Add(TEntity entity);           // INSERT new entity
     }
 }
