@@ -172,7 +172,7 @@ namespace EpicUniversity
 
             #region student data
 
-            var students = new Student[8];
+            var students = new Student[9];
             students[0] = new Student
             {
                 CreatedDate = DateTime.Today,
@@ -266,7 +266,7 @@ namespace EpicUniversity
 
             #region Professor data
 
-            var professors = new Professor[4];
+            var professors = new Professor[5];
             professors[0] = new Professor
             {
                 FirstName = "Bill",
@@ -316,6 +316,8 @@ namespace EpicUniversity
                     context.Professors.Add(p);
                 }
             }
+
+            context.SaveChanges();
 
             #endregion professors data
         }
