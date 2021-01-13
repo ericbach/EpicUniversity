@@ -27,10 +27,6 @@ namespace EpicUniversity.Data
                 .Property(p => p.Gpa)
                 .HasColumnType("decimal(2,1)");
 
-            modelBuilder.Entity<Student>()
-                .Property(p => p.Gpa)
-                .HasColumnType("decimal(2,1)");
-
             modelBuilder.Entity<Course>()
                 .HasOne(c => c.CourseLab)
                 .WithOne(i => i.Course)

@@ -13,5 +13,16 @@ namespace EpicUniversity.Models
         public decimal Gpa { get; set; }
         public IList<Course> Courses { get; set; } = new List<Course>();
         public IList<Grade> Grades { get; set; } = new List<Grade>();
+
+        public Student()
+        {
+        }
+
+        public Student(string firstName, string lastName, DateTime birthdate)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Birthdate = birthdate;
+        }
     }
 }
