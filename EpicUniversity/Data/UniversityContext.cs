@@ -20,7 +20,7 @@ namespace EpicUniversity.Data
             base.OnConfiguring(optionsBuilder);
 
             // Use lazy loading with proxies - https://docs.microsoft.com/en-us/ef/core/querying/related-data/lazy
-            optionsBuilder.UseLazyLoadingProxies();
+            //optionsBuilder.UseLazyLoadingProxies();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

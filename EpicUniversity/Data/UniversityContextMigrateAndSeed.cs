@@ -166,19 +166,36 @@ namespace EpicUniversity.Data
                     CreatedDate = DateTime.Today,
                     Name = "C# programming",
                     Credits = 3,
-
+                    Professor = professors[1],
+                    Students = new List<Student>
+                    {
+                        students[1],
+                        students[4]
+                    }
                 },
                 new Course
                 {
                     CreatedDate = DateTime.Today,
                     Name = "Database programming",
-                    Credits = 3
+                    Credits = 3,
+                    Professor = professors[3],
+                    Students = new List<Student>
+                    {
+                        students[6],
+                        students[8]
+                    }
                 },
                 new Course
                 {
                     CreatedDate = DateTime.Today,
                     Name = "Networking",
-                    Credits = 3
+                    Credits = 3,
+                    Professor = professors[4],
+                    Students = new List<Student>
+                    {
+                        students[7],
+                        students[9]
+                    }
                 },
                 new Course
                 {
