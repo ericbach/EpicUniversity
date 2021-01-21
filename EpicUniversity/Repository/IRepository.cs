@@ -16,5 +16,7 @@ namespace EpicUniversity.Repository
         void Remove(long id);
         void Remove(TEntity entity);
         void RemoveRange(ICollection<TEntity> entities);
+
+        void SaveChanges();
     }
 }

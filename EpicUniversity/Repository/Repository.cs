@@ -74,5 +74,10 @@ namespace EpicUniversity.Repository
         {
             DbSet.RemoveRange(entities);
         }
+
+        public void SaveChanges()
+        {
+            Context.SaveChanges();
+        }
     }
 }

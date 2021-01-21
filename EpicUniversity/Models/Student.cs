@@ -11,8 +11,8 @@ namespace EpicUniversity.Models
         public DateTime Birthdate { get; set; }
         [NotMapped]
         public decimal Gpa { get; set; }
-        public IList<Course> Courses { get; set; } = new List<Course>();
-        public IList<Grade> Grades { get; set; } = new List<Grade>();
+        public virtual IList<Course> Courses { get; set; } = new List<Course>();
+        public virtual IList<Grade> Grades { get; set; } = new List<Grade>();
 
         public Student()
         {

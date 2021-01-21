@@ -10,6 +10,6 @@ namespace EpicUniversity.Models
         public DateTime Birthdate { get; set; }
         public int Tenure { get; set; }
         public int ParkingSpot { get; set; }
-        public IList<Course> Courses { get; set; } = new List<Course>();
+        public virtual IList<Course> Courses { get; set; } = new List<Course>();
     }
 }

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.Linq;
-using EpicUniversity.Data;
 using EpicUniversity.Models;
 using EpicUniversity.Repository;
 using Newtonsoft.Json;
@@ -12,24 +10,22 @@ namespace EpicUniversity.Controllers
     [Route("[controller]")] // [Route("course")]
     public class CourseController : Controller
     {
-        public UniversityContext Context;
         public ICourseRepository CourseRepository;
 
-        public CourseController(UniversityContext context, ICourseRepository courseRepository)
+        public CourseController(ICourseRepository courseRepository)
         {
-            Context = context;
             CourseRepository = courseRepository;
         }
 
         // localhost/course/1
         [HttpGet("{id}")]
-        public ActionResult<Course> Get([FromRoute]long id)
+        public ActionResult<Course> Get([FromRoute] long id)
         {
             var course = CourseRepository.GetIncludingProfessorsStudents(id);
 
             if (course == null)
                 return NotFound();
-            
+
             return Ok(JsonConvert.SerializeObject(course, new JsonSerializerSettings()
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -40,21 +36,43 @@ namespace EpicUniversity.Controllers
         [HttpGet()]
         public ActionResult<List<Course>> GetAll()
         {
-            return Ok(Context.Courses.ToList());
-        }
-
-        // localhost/course/generic
-        [HttpGet("generic")]
-        public ActionResult<List<Course>> GetAllGeneric()
-        {
             return Ok(CourseRepository.GetAll());
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody]Course courseDetails)
+        public IActionResult Create([FromBody] Course courseDetails)
         {
             CourseRepository.Add(courseDetails);
-            Context.SaveChanges();
+            CourseRepository.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpPut]
+        public IActionResult Update([FromBody] Course courseDetails)
+        {
+            var course = CourseRepository.Get(courseDetails.Id);
+            if (course == null)
+                return BadRequest("Course does not exist");
+
+            course.Name = courseDetails.Name;
+            course.Credits = courseDetails.Credits;
+
+            CourseRepository.Update(course);
+            CourseRepository.SaveChanges();
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(long id)
+        {
+            var course = CourseRepository.Get(id);
+            if (course == null)
+                return BadRequest("Course does not exist");
+
+            CourseRepository.Remove(course);
+            CourseRepository.SaveChanges();
 
             return Ok();
         }

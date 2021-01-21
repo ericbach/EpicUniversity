@@ -8,15 +8,15 @@ namespace EpicUniversity.Models
         public int Credits { get; set; }
 
         // one-to-one relationship
-        public CourseLab CourseLab { get; set; }
+        public virtual CourseLab CourseLab { get; set; }
 
         // many-to-many relationship
-        public IList<Student> Students { get; set; } = new List<Student>();
+        public virtual IList<Student> Students { get; set; } = new List<Student>();
 
         // one-to-many relationship
-        public Professor Professor { get; set; }
+        public virtual Professor Professor { get; set; }
 
-        public IList<Grade> Grades { get; set; }
+        public virtual IList<Grade> Grades { get; set; }
     }
 
     public class CourseLab : Entity
@@ -24,6 +24,6 @@ namespace EpicUniversity.Models
         public string Name { get; set; }
 
         public long CourseId { get; set; }
-        public Course Course { get; set; }
+        public virtual Course Course { get; set; }
     }
 }
