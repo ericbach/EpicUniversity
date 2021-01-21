@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using EpicUniversity.Models;
-using Humanizer;
 using Microsoft.EntityFrameworkCore;
 
 namespace EpicUniversity.Repository
@@ -17,19 +16,19 @@ namespace EpicUniversity.Repository
             DbSet = context.Set<TEntity>(); // context.Set<Course>();
         }
 
-        // SELECT * FROM WHERE Id = id
+        // SELECT * FROM TEntity WHERE Id = id
         public TEntity Get(long id)
         {
             return DbSet.Find(id);
         }
 
-        // SELECT * FROM 
+        // SELECT * FROM TEntity
         public ICollection<TEntity> GetAll()
         {
             return DbSet.ToList();
         }
 
-        // INSERT INTO 
+        // INSERT INTO TEntity VALUES(...)
         public void Add(TEntity entity)
         {
             if (entity == null) return;
@@ -37,12 +36,43 @@ namespace EpicUniversity.Repository
             DbSet.Add(entity);
         }
 
-        // INSERT INTO ... x 1000
+        // INSERT INTO TEntity VALUES(...) * n
         public void AddRange(ICollection<TEntity> entities)
         {
             if (entities == null) return;
 
             DbSet.AddRange(entities);
+        }
+
+        // UPDATE TEntity SET column_name = values ...
+        public void Update(TEntity entity)
+        {
+            DbSet.Update(entity);
+        }
+
+        // UPDATE TEntity SET column_name = values ... * n
+        public void UpdateRange(ICollection<TEntity> entities)
+        {
+            DbSet.UpdateRange(entities);
+        }
+
+        // DELETE FROM TEntity WHERE Id = id
+        public void Remove(long id)
+        {
+            var entity = DbSet.Find(id);
+            DbSet.Remove(entity);
+        }
+
+        // DELETE FROM TEntity WHERE Id = id
+        public void Remove(TEntity entity)
+        {
+            DbSet.Remove(entity);
+        }
+
+        // DELETE FROM TEntity WHERE Id = id * n
+        public void RemoveRange(ICollection<TEntity> entities)
+        {
+            DbSet.RemoveRange(entities);
         }
     }
 }

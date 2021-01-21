@@ -25,13 +25,15 @@ namespace EpicUniversity
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<UniversityContext>(o =>
-                o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            {
+                o.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             services.AddControllers();
 
             services.AddSwaggerGen();
 
-            // Spring.NET - Services.xml, WebPages.xml, Dao.xml, etc.
+            // Add services (like Spring.NET - Services.xml, WebPages.xml, Dao.xml, etc)
             services.AddScoped<ICourseRepository, CourseRepository>();
             //RegisterServices(services, typeof(Repository<>), typeof(IRepository<>));
         }
@@ -50,7 +52,7 @@ namespace EpicUniversity
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Epic Univesity");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Epic University");
                 c.RoutePrefix = string.Empty;
             });
 

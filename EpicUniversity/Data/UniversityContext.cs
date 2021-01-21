@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EpicUniversity.Models;
+﻿using EpicUniversity.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EpicUniversity.Data
@@ -19,6 +15,14 @@ namespace EpicUniversity.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<Professor> Professors { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+
+            // Use lazy loading with proxies - https://docs.microsoft.com/en-us/ef/core/querying/related-data/lazy
+            optionsBuilder.UseLazyLoadingProxies();
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -27,6 +31,7 @@ namespace EpicUniversity.Data
                 .Property(p => p.Gpa)
                 .HasColumnType("decimal(2,1)");
 
+            // Setup one-to-one relationship
             modelBuilder.Entity<Course>()
                 .HasOne(c => c.CourseLab)
                 .WithOne(i => i.Course)

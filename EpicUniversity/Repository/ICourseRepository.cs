@@ -1,9 +1,11 @@
-﻿using EpicUniversity.Models;
+﻿using System.Collections.Generic;
+using EpicUniversity.Models;
 
 namespace EpicUniversity.Repository
 {
     public interface ICourseRepository : IRepository<Course>
     {
-
+        Course GetIncludingProfessorsStudents(long id);
+        ICollection<Course> GetCoursesWhereTheresMoreThan100Students();
     }
 }

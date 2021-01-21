@@ -15,7 +15,14 @@ namespace EpicUniversity.Repository
             _context = context;
         }
 
-
+        public Course GetIncludingProfessorsStudents(long id)
+        {
+            // Eager load Professors and Students
+            return _context.Courses
+                .Include(c => c.Professor)
+                .Include(c => c.Students)
+                .FirstOrDefault(c => c.Id == id);
+        }
 
         public ICollection<Course> GetCoursesWhereTheresMoreThan100Students()
         {
