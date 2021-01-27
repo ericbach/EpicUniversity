@@ -24,6 +24,11 @@ namespace EpicUniversity.Repository
                 .FirstOrDefault(c => c.Id == id);
         }
 
+        public ICollection<Course> GetAllCoursesWithCredit(int credits)
+        {
+            return Find(c => c.Credits == credits);
+        }
+
         public ICollection<Course> GetCoursesWhereTheresMoreThan100Students()
         {
             return _context.Courses.Where(c => c.Students.Count() > 100).ToList();

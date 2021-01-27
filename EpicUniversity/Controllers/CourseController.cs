@@ -39,6 +39,21 @@ namespace EpicUniversity.Controllers
             return Ok(CourseRepository.GetAll());
         }
 
+        // localhost/course/credits/1
+        [HttpGet("credits/{credits}")]
+        public ActionResult<Course> GetCourseWithCredits([FromRoute] int credits)
+        {
+            var courses = CourseRepository.GetAllCoursesWithCredit(credits);
+            
+            if (courses == null)
+                return NotFound();
+
+            return Ok(JsonConvert.SerializeObject(courses, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            }));
+        }
+
         [HttpPost]
         public IActionResult Create([FromBody] Course courseDetails)
         {

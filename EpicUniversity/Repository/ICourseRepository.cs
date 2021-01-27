@@ -6,6 +6,7 @@ namespace EpicUniversity.Repository
     public interface ICourseRepository : IRepository<Course>
     {
         Course GetIncludingProfessorsStudents(long id);
+        ICollection<Course> GetAllCoursesWithCredit(int credits);
         ICollection<Course> GetCoursesWhereTheresMoreThan100Students();
     }
 }

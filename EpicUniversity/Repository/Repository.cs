@@ -1,6 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
 using EpicUniversity.Models;
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 
 namespace EpicUniversity.Repository
@@ -22,10 +26,30 @@ namespace EpicUniversity.Repository
             return DbSet.Find(id);
         }
 
+        public async Task<TEntity> GetAsync(long id)
+        {
+            return await DbSet.FindAsync(id);
+        }
+        
         // SELECT * FROM TEntity
         public ICollection<TEntity> GetAll()
         {
             return DbSet.ToList();
+        }
+
+        public async Task<ICollection<TEntity>> GetAllAsync()
+        {
+            return await DbSet.ToListAsync();
+        }
+
+        public ICollection<TEntity> Find(Expression<Func<TEntity, bool>> predicate)
+        {
+            return DbSet.Where(predicate).ToList();
+        }
+
+        public async Task<ICollection<TEntity>> FindAsync(Expression<Func<TEntity, bool>> predicate)
+        {
+            return await DbSet.Where(predicate).ToListAsync();
         }
 
         // INSERT INTO TEntity VALUES(...)
@@ -36,6 +60,13 @@ namespace EpicUniversity.Repository
             DbSet.Add(entity);
         }
 
+        public async Task AddAsync(TEntity entity)
+        {
+            if (entity == null) return;
+
+            await DbSet.AddAsync(entity);
+        }
+
         // INSERT INTO TEntity VALUES(...) * n
         public void AddRange(ICollection<TEntity> entities)
         {
@@ -44,12 +75,19 @@ namespace EpicUniversity.Repository
             DbSet.AddRange(entities);
         }
 
+        public async Task AddRangeAsync(ICollection<TEntity> entities)
+        {
+            if (entities == null) return;
+
+            await DbSet.AddRangeAsync(entities);
+        }
+
         // UPDATE TEntity SET column_name = values ...
         public void Update(TEntity entity)
         {
             DbSet.Update(entity);
         }
-
+        
         // UPDATE TEntity SET column_name = values ... * n
         public void UpdateRange(ICollection<TEntity> entities)
         {
@@ -78,6 +116,11 @@ namespace EpicUniversity.Repository
         public void SaveChanges()
         {
             Context.SaveChanges();
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await Context.SaveChangesAsync();
         }
     }
 }
