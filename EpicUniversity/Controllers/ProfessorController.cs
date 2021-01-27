@@ -36,7 +36,7 @@ namespace EpicUniversity.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] Professor newProfessor)
         {
-            //gives error
+            //gives error, it adds prof even if exists.
             var proffs = ProfessorRepository.GetAll();
 
 
@@ -76,9 +76,9 @@ namespace EpicUniversity.Controllers
         {
             var isExistingProfessor = ProfessorRepository.Get(id);
             if (isExistingProfessor == null) return BadRequest("No such professor exists");
-
+            //first unassign the professor from the course then delete them.
             //delete
-            ProfessorRepository.Remove(isExistingProfessor.Id);
+            ProfessorRepository.Remove(isExistingProfessor);
             ProfessorRepository.SaveChanges();
 
             return Ok();
