@@ -36,6 +36,7 @@ namespace EpicUniversity
             // Add services (like Spring.NET - Services.xml, WebPages.xml, Dao.xml, etc)
             services.AddScoped<ICourseRepository, CourseRepository>();
             services.AddScoped<IProfessorRepository, ProfessorRepository>();
+            services.AddScoped<IStudentRepository, StudentRepository>();
             //RegisterServices(services, typeof(Repository<>), typeof(IRepository<>));
         }
 
