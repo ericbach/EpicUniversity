@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using EpicUniversity.Models;
 using EpicUniversity.Repository;
+using EpicUniversity.ViewModels;
 using Newtonsoft.Json;
 
 namespace EpicUniversity.Controllers
@@ -19,24 +20,41 @@ namespace EpicUniversity.Controllers
 
         // localhost/course/1
         [HttpGet("{id}")]
-        public ActionResult<Course> Get([FromRoute] long id)
+        public ActionResult<CourseViewModel> Get([FromRoute] long id)
         {
             var course = CourseRepository.GetIncludingProfessorsStudents(id);
 
             if (course == null)
                 return NotFound();
 
-            return Ok(JsonConvert.SerializeObject(course, new JsonSerializerSettings()
+            var courseViewModel = new CourseViewModel
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            }));
-        }
+                Name = course.Name,
+                Credits = course.Credits
+            };
 
+            return Ok(courseViewModel);
+        }
+        
         // localhost/course/
         [HttpGet()]
-        public ActionResult<List<Course>> GetAll()
+        public ActionResult<List<CourseViewModel>> GetAll()
         {
-            return Ok(CourseRepository.GetAll());
+            var courses = CourseRepository.GetAll();
+
+            var courseViewModels = new List<CourseViewModel>();
+            foreach (var course in courses)
+            {
+                var courseViewModel = new CourseViewModel
+                {
+                    Name = course.Name,
+                    Credits = course.Credits
+                };
+
+                courseViewModels.Add(courseViewModel);
+            }
+            
+            return Ok(courseViewModels);
         }
 
         // localhost/course/credits/1
@@ -55,9 +73,15 @@ namespace EpicUniversity.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Course courseDetails)
+        public IActionResult Create([FromBody] CourseViewModel courseViewModel)
         {
-            CourseRepository.Add(courseDetails);
+            var course = new Course
+            {
+                Name = courseViewModel.Name,
+                Credits = courseViewModel.Credits
+            };
+
+            CourseRepository.Add(course);
             CourseRepository.SaveChanges();
 
             return Ok();
