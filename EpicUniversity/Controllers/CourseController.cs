@@ -59,17 +59,25 @@ namespace EpicUniversity.Controllers
 
         // localhost/course/credits/1
         [HttpGet("credits/{credits}")]
-        public ActionResult<Course> GetCourseWithCredits([FromRoute] int credits)
+        public ActionResult<CourseViewModel> GetCourseWithCredits([FromRoute] int credits)
         {
             var courses = CourseRepository.GetAllCoursesWithCredit(credits);
-            
+
             if (courses == null)
                 return NotFound();
 
-            return Ok(JsonConvert.SerializeObject(courses, new JsonSerializerSettings
+            var courseViewModels = new List<CourseViewModel>();
+            foreach (var course in courses)
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            }));
+                var courseViewModel = new CourseViewModel
+                {
+                    Name = course.Name,
+                    Credits = course.Credits
+                };
+                courseViewModels.Add(courseViewModel);
+            }
+
+            return Ok(courseViewModels);
         }
 
         [HttpPost]
@@ -88,14 +96,14 @@ namespace EpicUniversity.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] Course courseDetails)
+        public IActionResult Update([FromBody] CourseUpdateViewModel updatedCourse)
         {
-            var course = CourseRepository.Get(courseDetails.Id);
+            var course = CourseRepository.Get(updatedCourse.Id);
             if (course == null)
                 return BadRequest("Course does not exist");
 
-            course.Name = courseDetails.Name;
-            course.Credits = courseDetails.Credits;
+            course.Name = updatedCourse.Name;
+            course.Credits = updatedCourse.Credits;
 
             CourseRepository.Update(course);
             CourseRepository.SaveChanges();
