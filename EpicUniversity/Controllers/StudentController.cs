@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using EpicUniversity.Models;
 using EpicUniversity.Repository;
+using EpicUniversity.ViewModels;
 using Newtonsoft.Json;
 
 namespace EpicUniversity.Controllers
@@ -19,24 +20,41 @@ namespace EpicUniversity.Controllers
 
         // localhost/student/1
         [HttpGet("{id}")]
-        public ActionResult<Student> Get([FromRoute] long id)
+        public ActionResult<StudentViewModel> Get([FromRoute] long id)
         {
             var student = StudentRepository.GetIncludingCourses(id);
 
             if (student == null)
                 return NotFound();
 
-            return Ok(JsonConvert.SerializeObject(student, new JsonSerializerSettings()
+            var studentViewModel = new StudentViewModel
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            }));
+                FirstName = student.FirstName,
+                LastName = student.LastName
+            };
+
+            return Ok(studentViewModel);
         }
 
         // localhost/student/
         [HttpGet()]
-        public ActionResult<List<Student>> GetAll()
+        public ActionResult<List<StudentViewModel>> GetAll()
         {
-            return Ok(StudentRepository.GetAll());
+            var students = StudentRepository.GetAll();
+
+            var studentViewModels = new List<StudentViewModel>();
+            foreach (var student in students)
+            {
+                var studentViewModel = new StudentViewModel
+                {
+                    FirstName = student.FirstName,
+                    LastName = student.LastName
+                };
+
+                studentViewModels.Add(studentViewModel);
+            }
+
+            return Ok(studentViewModels);
         }
 
         [HttpPost]
