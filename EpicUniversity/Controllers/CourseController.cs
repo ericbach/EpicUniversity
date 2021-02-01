@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using EpicUniversity.Models;
 using EpicUniversity.Repository;
 using EpicUniversity.ViewModels;
-using Newtonsoft.Json;
 
 namespace EpicUniversity.Controllers
 {
@@ -27,13 +26,16 @@ namespace EpicUniversity.Controllers
             if (course == null)
                 return NotFound();
 
-            var courseViewModel = new CourseViewModel
-            {
-                Name = course.Name,
-                Credits = course.Credits
-            };
+            var courseVm = Mapper.Map<Course, CourseViewModel>(course);
+            return Ok(courseVm);
 
-            return Ok(courseViewModel);
+            //var courseViewModel = new CourseViewModel
+            //{
+            //    Name = course.Name,
+            //    Credits = course.Credits,
+            //};
+
+            //return Ok(courseViewModel);
         }
         
         // localhost/course/
@@ -42,18 +44,14 @@ namespace EpicUniversity.Controllers
         {
             var courses = CourseRepository.GetAll();
 
+            //var courseVM = Mapper.Map<ICollection<Course>, ICollection<CourseViewModel>>(courses);
             var courseViewModels = new List<CourseViewModel>();
             foreach (var course in courses)
             {
-                var courseViewModel = new CourseViewModel
-                {
-                    Name = course.Name,
-                    Credits = course.Credits
-                };
-
+                var courseViewModel = Mapper.Map<Course, CourseViewModel>(course);
                 courseViewModels.Add(courseViewModel);
             }
-            
+
             return Ok(courseViewModels);
         }
 
@@ -69,11 +67,7 @@ namespace EpicUniversity.Controllers
             var courseViewModels = new List<CourseViewModel>();
             foreach (var course in courses)
             {
-                var courseViewModel = new CourseViewModel
-                {
-                    Name = course.Name,
-                    Credits = course.Credits
-                };
+                var courseViewModel = Mapper.Map<Course, CourseViewModel>(course);
                 courseViewModels.Add(courseViewModel);
             }
 
@@ -83,11 +77,7 @@ namespace EpicUniversity.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] CourseViewModel courseViewModel)
         {
-            var course = new Course
-            {
-                Name = courseViewModel.Name,
-                Credits = courseViewModel.Credits
-            };
+            var course = Mapper.Map<CourseViewModel, Course>(courseViewModel);
 
             CourseRepository.Add(course);
             CourseRepository.SaveChanges();
