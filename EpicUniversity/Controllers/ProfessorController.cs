@@ -40,14 +40,26 @@ namespace EpicUniversity.Controllers
             return Ok(professorViewModel);
         }
         [HttpGet("Professor/{name}")]
-        public ActionResult<ProfessorViewModel> Get([FromRoute] string name)
+        public ActionResult<IList<ProfessorViewModel>> Get([FromRoute] string name)
         {
             var professors = ProfessorRepository.GetProfessorWithCourseInfoByName(name);
 
             if (professors == null) return NotFound();
-            var professorViewModel = new ProfessorViewModel();
-            professorViewModel.Professors = professors;
-            return Ok(professorViewModel.Professors);
+            IList<ProfessorViewModel> listOfProfessor = new List<ProfessorViewModel>();
+            foreach (Professor p in professors)
+            {
+               var professorViewModel = new ProfessorViewModel
+                {
+                    FirstName=p.FirstName,
+                    LastName=p.LastName,
+                    Tenure=p.Tenure
+                };
+                listOfProfessor.Add(professorViewModel);
+
+            }
+            return Ok(listOfProfessor);
+
+
         }
 
         [HttpPost]

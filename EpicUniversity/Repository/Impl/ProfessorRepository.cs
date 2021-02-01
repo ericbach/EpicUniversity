@@ -25,8 +25,9 @@ namespace EpicUniversity.Repository
 
         public IEnumerable<Professor> GetProfessorWithCourseInfoByName(string name)
         {
-            return _context.Professors.Include(c => c.Courses)
-                .ToList().Where(c => c.FirstName == name);
+            return Find(c => c.FirstName.ToLower() == name.ToLower() || c.LastName.ToLower() == name.ToLower());
+            //return _context.Professors.Include(c => c.Courses)
+            //    .ToList().Where(c => c.FirstName.ToLower() == name.ToLower() || c.LastName.ToLower() == name.ToLower());
         }
     }
 }
