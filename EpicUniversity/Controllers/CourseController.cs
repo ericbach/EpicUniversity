@@ -102,8 +102,8 @@ namespace EpicUniversity.Controllers
             if (course == null)
                 return BadRequest("Course does not exist");
 
-            course.Name = updatedCourse.Name;
-            course.Credits = updatedCourse.Credits;
+            course.Name = updatedCourse.Course.Name;
+            course.Credits = updatedCourse.Course.Credits;
 
             CourseRepository.Update(course);
             CourseRepository.SaveChanges();
