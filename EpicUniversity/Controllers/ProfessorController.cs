@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EpicUniversity.Models;
 using EpicUniversity.Repository;
+using EpicUniversity.ViewModels;
 using Newtonsoft.Json;
 
 namespace EpicUniversity.Controllers
@@ -21,32 +23,50 @@ namespace EpicUniversity.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Professor> Get([FromRoute] long id)
+        public ActionResult<ProfessorViewModel> Get([FromRoute] long id)
         {
             var proff = ProfessorRepository.GetProfessorWithCourseInfo(id);
 
             if (proff == null) return NotFound();
 
-            return Ok(JsonConvert.SerializeObject(proff, new JsonSerializerSettings()
+            var professorViewModel = new ProfessorViewModel
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            }));
+                FirstName = proff.FirstName,
+                LastName = proff.LastName,
+                ParkingSpot = proff.ParkingSpot,
+                Tenure = proff.Tenure,
+                NumberOfCoursesOfferedByProfessor = proff.Courses.Count
+            };
+            return Ok(professorViewModel);
+        }
+        [HttpGet("Professor/{name}")]
+        public ActionResult<ProfessorViewModel> Get([FromRoute] string name)
+        {
+            var professors = ProfessorRepository.GetProfessorWithCourseInfoByName(name);
+
+            if (professors == null) return NotFound();
+            var professorViewModel = new ProfessorViewModel();
+            professorViewModel.Professors = professors;
+            return Ok(professorViewModel.Professors);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Professor newProfessor)
+        public IActionResult Create([FromBody] ProfessorViewModel newProfessor)
         {
-            //gives error, it adds prof even if exists.
-            var proffs = ProfessorRepository.GetAll();
+            var professor = new Professor
+           {
+               FirstName = newProfessor.FirstName,
+               LastName = newProfessor.LastName,
+               ParkingSpot = newProfessor.ParkingSpot,
+               Tenure = newProfessor.Tenure,
+               Birthdate=newProfessor.Birthdate,
+               CreatedDate=DateTime.Now
+               
+           };
 
-
-            if (proffs == null || !proffs.Contains(newProfessor))
-            {
-                ProfessorRepository.Add(newProfessor);
-                ProfessorRepository.SaveChanges();
-            }
-
-            return Ok();
+           ProfessorRepository.Add(professor);
+           ProfessorRepository.SaveChanges();
+           return Ok();
         }
 
         [HttpPut]
@@ -76,7 +96,7 @@ namespace EpicUniversity.Controllers
         {
             var isExistingProfessor = ProfessorRepository.Get(id);
             if (isExistingProfessor == null) return BadRequest("No such professor exists");
-            //first unassign the professor from the course then delete them.
+            
             //delete
             ProfessorRepository.Remove(isExistingProfessor);
             ProfessorRepository.SaveChanges();
