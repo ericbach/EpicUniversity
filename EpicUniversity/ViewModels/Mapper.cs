@@ -12,7 +12,6 @@ namespace EpicUniversity.ViewModels
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Course, CourseViewModel>().ReverseMap();
-
                 cfg.CreateMap<Student, StudentViewModel>().ReverseMap();
                 cfg.CreateMap<Professor, ProfessorViewModel>().ReverseMap();
             });

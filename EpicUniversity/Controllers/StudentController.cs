@@ -27,13 +27,8 @@ namespace EpicUniversity.Controllers
             if (student == null)
                 return NotFound();
 
-            var studentViewModel = new StudentViewModel
-            {
-                FirstName = student.FirstName,
-                LastName = student.LastName
-            };
-
-            return Ok(studentViewModel);
+            var studentVm = Mapper.Map<Student, StudentViewModel>(student);
+            return Ok(studentVm);
         }
 
         // localhost/student/
@@ -45,12 +40,7 @@ namespace EpicUniversity.Controllers
             var studentViewModels = new List<StudentViewModel>();
             foreach (var student in students)
             {
-                var studentViewModel = new StudentViewModel
-                {
-                    FirstName = student.FirstName,
-                    LastName = student.LastName
-                };
-
+                var studentViewModel = Mapper.Map<Student, StudentViewModel>(student);
                 studentViewModels.Add(studentViewModel);
             }
 
@@ -58,9 +48,10 @@ namespace EpicUniversity.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Student studentDetails)
+        public IActionResult Create([FromBody] StudentViewModel studentViewModel)
         {
-            StudentRepository.Add(studentDetails);
+            var student = Mapper.Map<StudentViewModel, Student>(studentViewModel);
+            StudentRepository.Add(student);
             StudentRepository.SaveChanges();
 
             return Ok();
