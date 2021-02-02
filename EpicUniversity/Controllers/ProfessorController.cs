@@ -28,16 +28,9 @@ namespace EpicUniversity.Controllers
             var proff = ProfessorRepository.GetProfessorWithCourseInfo(id);
 
             if (proff == null) return NotFound();
+            var professorvm = Mapper.Map<Professor, ProfessorViewModel>(proff);
 
-            var professorViewModel = new ProfessorViewModel
-            {
-                FirstName = proff.FirstName,
-                LastName = proff.LastName,
-                ParkingSpot = proff.ParkingSpot,
-                Tenure = proff.Tenure,
-                NumberOfCoursesOfferedByProfessor = proff.Courses.Count
-            };
-            return Ok(professorViewModel);
+            return Ok(professorvm);
         }
         [HttpGet("Professor/{name}")]
         public ActionResult<IList<ProfessorViewModel>> Get([FromRoute] string name)
@@ -65,18 +58,9 @@ namespace EpicUniversity.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] ProfessorViewModel newProfessor)
         {
-            var professor = new Professor
-           {
-               FirstName = newProfessor.FirstName,
-               LastName = newProfessor.LastName,
-               ParkingSpot = newProfessor.ParkingSpot,
-               Tenure = newProfessor.Tenure,
-               Birthdate=newProfessor.Birthdate,
-               CreatedDate=DateTime.Now
-               
-           };
-
-           ProfessorRepository.Add(professor);
+            var newProf = Mapper.Map<ProfessorViewModel, Professor>(newProfessor);
+          
+           ProfessorRepository.Add(newProf);
            ProfessorRepository.SaveChanges();
            return Ok();
         }
