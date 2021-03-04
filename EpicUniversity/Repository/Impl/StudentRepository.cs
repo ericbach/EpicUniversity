@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using EpicUniversity.Data;
 using EpicUniversity.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace EpicUniversity.Repository
+namespace EpicUniversity.Repository.Impl
 {
     public class StudentRepository : Repository<Student>, IStudentRepository
     {

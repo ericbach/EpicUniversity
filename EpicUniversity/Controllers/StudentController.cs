@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using EpicUniversity.Models;
 using EpicUniversity.Repository;
 using EpicUniversity.ViewModels;
-using Newtonsoft.Json;
 
 namespace EpicUniversity.Controllers
 {
@@ -27,11 +26,7 @@ namespace EpicUniversity.Controllers
             if (student == null)
                 return NotFound();
 
-            var studentViewModel = new StudentViewModel
-            {
-                FirstName = student.FirstName,
-                LastName = student.LastName
-            };
+            var studentViewModel = Mapper.Map<Student, StudentViewModel>(student);
 
             return Ok(studentViewModel);
         }
@@ -45,11 +40,7 @@ namespace EpicUniversity.Controllers
             var studentViewModels = new List<StudentViewModel>();
             foreach (var student in students)
             {
-                var studentViewModel = new StudentViewModel
-                {
-                    FirstName = student.FirstName,
-                    LastName = student.LastName
-                };
+                var studentViewModel = Mapper.Map<Student, StudentViewModel>(student);
 
                 studentViewModels.Add(studentViewModel);
             }
@@ -58,9 +49,11 @@ namespace EpicUniversity.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Student studentDetails)
+        public IActionResult Create([FromBody] StudentViewModel studentDetails)
         {
-            StudentRepository.Add(studentDetails);
+            var student = Mapper.Map<StudentViewModel, Student>(studentDetails);
+
+            StudentRepository.Add(student);
             StudentRepository.SaveChanges();
 
             return Ok();

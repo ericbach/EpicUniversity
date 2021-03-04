@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
 using EpicUniversity.Models;
 
 namespace EpicUniversity.ViewModels
@@ -12,9 +13,14 @@ namespace EpicUniversity.ViewModels
             var configuration = new MapperConfiguration(cfg =>
             {
                 cfg.CreateMap<Course, CourseViewModel>().ReverseMap();
+                //cfg.CreateMap<List<Course>, List<CourseViewModel>>().ReverseMap();
 
                 cfg.CreateMap<Student, StudentViewModel>().ReverseMap();
-                cfg.CreateMap<Professor, ProfessorViewModel>().ReverseMap();
+                cfg.CreateMap<Professor, ProfessorViewModel>()
+                    .ForMember(d => d.NumberOfCoursesOfferedByProfessor,
+                        o => o.MapFrom(s => s.Courses.Count));
+
+                cfg.CreateMap<ProfessorViewModel, Professor>();
             });
 
             AutoMapper = configuration.CreateMapper();

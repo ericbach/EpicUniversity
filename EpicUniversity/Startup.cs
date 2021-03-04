@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using EpicUniversity.Data;
 using EpicUniversity.Repository;
+using EpicUniversity.Repository.Impl;
 using Microsoft.EntityFrameworkCore;
 
 namespace EpicUniversity

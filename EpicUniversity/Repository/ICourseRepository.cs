@@ -7,6 +7,6 @@ namespace EpicUniversity.Repository
     {
         Course GetIncludingProfessorsStudents(long id);
         ICollection<Course> GetAllCoursesWithCredit(int credits);
-        ICollection<Course> GetCoursesWhereTheresMoreThan100Students();
+        ICollection<Course> GetCoursesWithMoreThan100Students();
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using EpicUniversity.Models;
 
 namespace EpicUniversity.ViewModels
 {
@@ -12,8 +10,5 @@ namespace EpicUniversity.ViewModels
         public int ParkingSpot { get; set; }
         public virtual int NumberOfCoursesOfferedByProfessor { get; set; }
         public DateTime Birthdate { get; set; }
-
     }
-
-   
 }

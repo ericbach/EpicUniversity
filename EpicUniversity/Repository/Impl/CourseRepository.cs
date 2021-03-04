@@ -4,7 +4,7 @@ using EpicUniversity.Data;
 using EpicUniversity.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace EpicUniversity.Repository
+namespace EpicUniversity.Repository.Impl
 {
     public class CourseRepository : Repository<Course>, ICourseRepository
     {
@@ -29,7 +29,7 @@ namespace EpicUniversity.Repository
             return Find(c => c.Credits == credits);
         }
 
-        public ICollection<Course> GetCoursesWhereTheresMoreThan100Students()
+        public ICollection<Course> GetCoursesWithMoreThan100Students()
         {
             return _context.Courses.Where(c => c.Students.Count() > 100).ToList();
         }

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using EpicUniversity.Data;
 using EpicUniversity.Models;
 using Microsoft.EntityFrameworkCore;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace EpicUniversity.Repository
+namespace EpicUniversity.Repository.Impl
 {
     public class ProfessorRepository:Repository<Professor>,IProfessorRepository
     {
@@ -17,17 +17,15 @@ namespace EpicUniversity.Repository
 
         public Professor GetProfessorWithCourseInfo(long id)
         {
-            
-               return  _context.Professors.Include(c => c.Courses)
-                                          .FirstOrDefault(c => c.Id == id);
-            
+            return _context.Professors.Include(c => c.Courses)
+                .FirstOrDefault(c => c.Id == id);
         }
 
         public IEnumerable<Professor> GetProfessorWithCourseInfoByName(string name)
         {
-            return Find(c => c.FirstName.ToLower() == name.ToLower() || c.LastName.ToLower() == name.ToLower());
-            //return _context.Professors.Include(c => c.Courses)
-            //    .ToList().Where(c => c.FirstName.ToLower() == name.ToLower() || c.LastName.ToLower() == name.ToLower());
+            return Find(c =>
+                string.Equals(c.FirstName, name, StringComparison.CurrentCultureIgnoreCase) ||
+                string.Equals(c.LastName, name, StringComparison.CurrentCultureIgnoreCase));
         }
     }
 }

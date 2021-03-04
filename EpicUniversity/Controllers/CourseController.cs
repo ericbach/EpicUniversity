@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using EpicUniversity.Models;
 using EpicUniversity.Repository;
 using EpicUniversity.ViewModels;
@@ -28,29 +29,16 @@ namespace EpicUniversity.Controllers
 
             var courseVm = Mapper.Map<Course, CourseViewModel>(course);
             return Ok(courseVm);
-
-            //var courseViewModel = new CourseViewModel
-            //{
-            //    Name = course.Name,
-            //    Credits = course.Credits,
-            //};
-
-            //return Ok(courseViewModel);
         }
         
         // localhost/course/
         [HttpGet()]
         public ActionResult<List<CourseViewModel>> GetAll()
         {
-            var courses = CourseRepository.GetAll();
+            var courses = CourseRepository.GetAll().ToList();
 
-            //var courseVM = Mapper.Map<ICollection<Course>, ICollection<CourseViewModel>>(courses);
-            var courseViewModels = new List<CourseViewModel>();
-            foreach (var course in courses)
-            {
-                var courseViewModel = Mapper.Map<Course, CourseViewModel>(course);
-                courseViewModels.Add(courseViewModel);
-            }
+            //var courseViewModels = Mapper.Map<List<Course>, List<CourseViewModel>>(courses);
+            var courseViewModels = courses.Select(course => Mapper.Map<Course, CourseViewModel>(course)).ToList();
 
             return Ok(courseViewModels);
         }
@@ -64,12 +52,7 @@ namespace EpicUniversity.Controllers
             if (courses == null)
                 return NotFound();
 
-            var courseViewModels = new List<CourseViewModel>();
-            foreach (var course in courses)
-            {
-                var courseViewModel = Mapper.Map<Course, CourseViewModel>(course);
-                courseViewModels.Add(courseViewModel);
-            }
+            var courseViewModels = courses.Select(course => Mapper.Map<Course, CourseViewModel>(course)).ToList();
 
             return Ok(courseViewModels);
         }

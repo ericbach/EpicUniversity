@@ -1,18 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using EpicUniversity.Models;
 using EpicUniversity.Repository;
 using EpicUniversity.ViewModels;
-using Newtonsoft.Json;
 
 namespace EpicUniversity.Controllers
 {
     [ApiController]
-    [Route("Controller")]
+    [Route("[controller]")]
     public class ProfessorController : Controller
     {
         public IProfessorRepository ProfessorRepository;
@@ -25,60 +22,35 @@ namespace EpicUniversity.Controllers
         [HttpGet("{id}")]
         public ActionResult<ProfessorViewModel> Get([FromRoute] long id)
         {
-            var proff = ProfessorRepository.GetProfessorWithCourseInfo(id);
+            var prof = ProfessorRepository.GetProfessorWithCourseInfo(id);
 
-            if (proff == null) return NotFound();
+            if (prof == null) return NotFound();
 
-            var professorViewModel = new ProfessorViewModel
-            {
-                FirstName = proff.FirstName,
-                LastName = proff.LastName,
-                ParkingSpot = proff.ParkingSpot,
-                Tenure = proff.Tenure,
-                NumberOfCoursesOfferedByProfessor = proff.Courses.Count
-            };
+            var professorViewModel = Mapper.Map<Professor, ProfessorViewModel>(prof);
+
             return Ok(professorViewModel);
         }
-        [HttpGet("Professor/{name}")]
+
+        [HttpGet("name={name}")]
         public ActionResult<IList<ProfessorViewModel>> Get([FromRoute] string name)
         {
             var professors = ProfessorRepository.GetProfessorWithCourseInfoByName(name);
 
             if (professors == null) return NotFound();
-            IList<ProfessorViewModel> listOfProfessor = new List<ProfessorViewModel>();
-            foreach (Professor p in professors)
-            {
-               var professorViewModel = new ProfessorViewModel
-                {
-                    FirstName=p.FirstName,
-                    LastName=p.LastName,
-                    Tenure=p.Tenure
-                };
-                listOfProfessor.Add(professorViewModel);
 
-            }
+            var listOfProfessor = professors.Select(p => Mapper.Map<Professor, ProfessorViewModel>(p)).ToList();
+
             return Ok(listOfProfessor);
-
-
         }
 
         [HttpPost]
         public IActionResult Create([FromBody] ProfessorViewModel newProfessor)
         {
-            var professor = new Professor
-           {
-               FirstName = newProfessor.FirstName,
-               LastName = newProfessor.LastName,
-               ParkingSpot = newProfessor.ParkingSpot,
-               Tenure = newProfessor.Tenure,
-               Birthdate=newProfessor.Birthdate,
-               CreatedDate=DateTime.Now
-               
-           };
+            var professor = Mapper.Map<ProfessorViewModel, Professor>(newProfessor);
 
-           ProfessorRepository.Add(professor);
-           ProfessorRepository.SaveChanges();
-           return Ok();
+            ProfessorRepository.Add(professor);
+            ProfessorRepository.SaveChanges();
+            return Ok();
         }
 
         [HttpPut]
