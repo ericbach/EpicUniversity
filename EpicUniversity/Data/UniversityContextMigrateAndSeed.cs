@@ -169,6 +169,7 @@ namespace EpicUniversity.Data
                     Professor = professors[1],
                     Students = new List<Student>
                     {
+                        students[0],
                         students[1],
                         students[4]
                     }
@@ -181,6 +182,7 @@ namespace EpicUniversity.Data
                     Professor = professors[3],
                     Students = new List<Student>
                     {
+                        students[0],
                         students[6],
                         students[8]
                     }
@@ -201,19 +203,30 @@ namespace EpicUniversity.Data
                 {
                     CreatedDate = DateTime.Today,
                     Name = "Java programming",
-                    Credits = 3
+                    Credits = 3,
+                    Professor = professors[3],
+                    Students = new List<Student>
+                    {
+                        students[0]
+                    }
                 },
                 new Course
                 {
                     CreatedDate = DateTime.Today,
                     Name = "Communication and organization",
-                    Credits = 3
+                    Credits = 3,
+                    Professor = professors[2],
+                    Students = new List<Student>
+                    {
+                        students[0]
+                    }
                 },
                 new Course
                 {
                     CreatedDate = DateTime.Today,
                     Name = "Distributed programming",
-                    Credits = 3
+                    Credits = 3,
+                    Professor = professors[1]
                 }
             };
 

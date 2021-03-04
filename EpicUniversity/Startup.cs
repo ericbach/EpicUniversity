@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using EpicUniversity.Data;
 using EpicUniversity.Repository;
 using EpicUniversity.Repository.Impl;
+using EpicUniversity.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace EpicUniversity
@@ -39,6 +40,8 @@ namespace EpicUniversity
             services.AddScoped<IProfessorRepository, ProfessorRepository>();
             services.AddScoped<IStudentRepository, StudentRepository>();
             //RegisterServices(services, typeof(Repository<>), typeof(IRepository<>));
+
+            services.AddScoped<IEnrollmentService, EnrollmentService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
