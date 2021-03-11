@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using EpicUniversity.Models;
@@ -57,7 +58,11 @@ namespace EpicUniversity.Test
         }
 
         [TestMethod]
-        public void Student_ShouldOnlyBeAbleToEnroll_InCourseWithLessThanTenCredits()
+        [DataRow(3, 6, true)]
+        [DataRow(3, 7, true)]
+        [DataRow(3, 8, false)]
+        [DataRow(3, 9, false)]
+        public void Student_ShouldOnlyBeAbleToEnroll_InCourseWithLessThanTenCredits(int courseCredits, int studentCredits, bool shouldAllowEnrollment)
         {
             // ARRANGE
             var courseId = 1;
@@ -67,7 +72,7 @@ namespace EpicUniversity.Test
             var mockCourse = new Course
             {
                 Students = new List<Student>(),
-                Credits = 3
+                Credits = courseCredits
             };
             var mockCourseRepository = new Mock<ICourseRepository>();
             mockCourseRepository.Setup(x => x.GetIncludingProfessorsStudents(It.Is<long>(s => s == courseId))).Returns(mockCourse);
@@ -78,7 +83,7 @@ namespace EpicUniversity.Test
                 {
                     new Course
                     {
-                        Credits = 9
+                        Credits = studentCredits
                     }
                 }
             };
@@ -92,7 +97,10 @@ namespace EpicUniversity.Test
             var result = enrollmentService.Enroll(1, 1);
 
             // ASSERT
-            result.First().Should().BeEquivalentTo("Student is already enrolled in more than 10 credits of courses");
+            if (shouldAllowEnrollment)
+                result.Should().BeEmpty();
+            else
+                result.First().Should().BeEquivalentTo("Student is already enrolled in more than 10 credits of courses");
         }
     }
 }
