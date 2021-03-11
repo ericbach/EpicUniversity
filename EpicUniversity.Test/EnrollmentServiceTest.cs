@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection.Metadata;
+using System.Linq;
 using EpicUniversity.Models;
 using EpicUniversity.Repository;
-using EpicUniversity.Repository.Impl;
 using EpicUniversity.Services;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -56,6 +54,45 @@ namespace EpicUniversity.Test
 
             // ASSERT
             result.Should().BeEmpty("Successfully enrolling in a course should not return validation errors");
+        }
+
+        [TestMethod]
+        public void Student_ShouldNot_BeAbleToEnrollInCourseWithMoreThanTenCredits()
+        {
+            // ARRANGE
+            var courseId = 1;
+            var studentId = 1;
+
+            // Course to enroll in
+            var mockCourse = new Course
+            {
+                Students = new List<Student>(),
+                Credits = 3
+            };
+            var mockCourseRepository = new Mock<ICourseRepository>();
+            mockCourseRepository.Setup(x => x.GetIncludingProfessorsStudents(It.Is<long>(s => s == courseId))).Returns(mockCourse);
+
+            var mockStudent = new Student
+            {
+                Courses = new List<Course>
+                {
+                    new Course
+                    {
+                        Credits = 9
+                    }
+                }
+            };
+            var mockStudentRepository = new Mock<IStudentRepository>();
+            mockStudentRepository.Setup(x => x.GetIncludingCourses(It.Is<long>(s => s == studentId))).Returns(mockStudent);
+            mockStudentRepository.Setup(x => x.Update(It.IsAny<Student>()));
+            mockStudentRepository.Setup(x => x.SaveChanges());
+
+            // ACT
+            var enrollmentService = new EnrollmentService(mockCourseRepository.Object, mockStudentRepository.Object);
+            var result = enrollmentService.Enroll(1, 1);
+
+            // ASSERT
+            result.First().Should().BeEquivalentTo("Student is already enrolled in more than 10 credits of courses");
         }
     }
 }
