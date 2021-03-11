@@ -15,7 +15,7 @@ namespace EpicUniversity.Repository.Impl
             _context = context;
         }
 
-        public Course GetIncludingProfessorsStudents(long id)
+        public virtual Course GetIncludingProfessorsStudents(long id)
         {
             // Eager load Professors and Students
             return _context.Courses

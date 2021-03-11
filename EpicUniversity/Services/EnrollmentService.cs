@@ -33,7 +33,7 @@ namespace EpicUniversity.Services
             if (course.Students.Count > 2)
                 validationErrors.Add("Course is full");
 
-            if (student.Courses.Sum(c => c.Credits) > 10)
+            if (student.Courses.Sum(c => c.Credits) + course.Credits > 10)
                 validationErrors.Add("Student is already enrolled in more than 10 credits of courses");
 
             student.Courses.Add(course);

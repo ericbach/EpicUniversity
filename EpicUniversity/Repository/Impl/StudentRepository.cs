@@ -14,7 +14,7 @@ namespace EpicUniversity.Repository.Impl
             _context = context;
         }
 
-        public Student GetIncludingCourses(long id)
+        public virtual Student GetIncludingCourses(long id)
         {
             return _context.Students
                 .Include(s => s.Courses)

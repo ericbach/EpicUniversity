@@ -83,7 +83,7 @@ namespace EpicUniversity.Repository
         }
 
         // UPDATE TEntity SET column_name = values ...
-        public void Update(TEntity entity)
+        public virtual void Update(TEntity entity)
         {
             DbSet.Update(entity);
         }
@@ -113,7 +113,7 @@ namespace EpicUniversity.Repository
             DbSet.RemoveRange(entities);
         }
 
-        public void SaveChanges()
+        public virtual void SaveChanges()
         {
             Context.SaveChanges();
         }
