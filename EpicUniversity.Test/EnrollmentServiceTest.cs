@@ -57,7 +57,7 @@ namespace EpicUniversity.Test
         }
 
         [TestMethod]
-        public void Student_ShouldNot_BeAbleToEnrollInCourseWithMoreThanTenCredits()
+        public void Student_ShouldOnlyBeAbleToEnroll_InCourseWithLessThanTenCredits()
         {
             // ARRANGE
             var courseId = 1;
