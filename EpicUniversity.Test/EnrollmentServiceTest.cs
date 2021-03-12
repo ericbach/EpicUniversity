@@ -102,5 +102,78 @@ namespace EpicUniversity.Test
             else
                 result.First().Should().BeEquivalentTo("Student is already enrolled in more than 10 credits of courses");
         }
+
+        [TestMethod]
+        public void Student_ShouldCheck_TheCourseIsFull()
+        {
+            // ARRANGE
+            var courseId = 1;
+            var studentId = 1;
+            var studentList = new List<Student>();
+
+            studentList.Add(new Student {Id = 2});
+            studentList.Add(new Student {Id = 3});
+            studentList.Add(new Student { Id = 4 });
+
+
+            // Course to enroll in
+            var mockCourse = new Course
+            {
+                Students = studentList
+
+            };
+            var mockCourseRepository = new Mock<ICourseRepository>();
+            mockCourseRepository.Setup(x => x.GetIncludingProfessorsStudents(It.Is<long>(s => s == courseId))).Returns(mockCourse);
+
+            var mockStudent = new Student
+            {
+
+            };
+            var mockStudentRepository = new Mock<IStudentRepository>();
+            mockStudentRepository.Setup(x => x.GetIncludingCourses(It.Is<long>(s => s == studentId))).Returns(mockStudent);
+            mockStudentRepository.Setup(x => x.Update(It.IsAny<Student>()));
+            mockStudentRepository.Setup(x => x.SaveChanges());
+
+            // ACT
+            var enrollmentService = new EnrollmentService(mockCourseRepository.Object, mockStudentRepository.Object);
+            var result = enrollmentService.Enroll(1, 1);
+
+            // ASSERT
+            result.Should().NotBeEmpty("The course is full");
+
+        }
+
+        [TestMethod]
+        public void Student_ShouldNot_EnrollInSameCourseAgain()
+        {
+            // ARRANGE
+            var courseId = 1;
+            var studentId = 1;
+            var studentList = new List<Student>();
+            studentList.Add(new Student {Id = 1});
+
+            // Course to enroll in
+            var mockCourse = new Course
+            {
+                Students=studentList
+            };
+            var mockCourseRepository = new Mock<ICourseRepository>();
+            mockCourseRepository.Setup(x => x.GetIncludingProfessorsStudents(It.Is<long>(s => s == courseId))).Returns(mockCourse);
+
+            var mockStudent = new Student
+            {
+            };
+            var mockStudentRepository = new Mock<IStudentRepository>();
+            mockStudentRepository.Setup(x => x.GetIncludingCourses(It.Is<long>(s => s == studentId))).Returns(mockStudent);
+            mockStudentRepository.Setup(x => x.Update(It.IsAny<Student>()));
+            mockStudentRepository.Setup(x => x.SaveChanges());
+
+            // ACT
+            var enrollmentService = new EnrollmentService(mockCourseRepository.Object, mockStudentRepository.Object);
+            var result = enrollmentService.Enroll(1, 1);
+
+            // ASSERT
+            result.Should().NotBeEmpty("Student is already enrolled in course");
+        }
     }
 }
