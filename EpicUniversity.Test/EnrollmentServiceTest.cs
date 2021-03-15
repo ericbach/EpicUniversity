@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using EpicUniversity.Models;
-using EpicUniversity.Repository;
 using EpicUniversity.Services;
+using EpicUniversity.Test.Mock;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 
 namespace EpicUniversity.Test
 {
@@ -26,13 +24,12 @@ namespace EpicUniversity.Test
             var courseId = 1;
             var studentId = 1;
 
-            var mockCourse = new Course
+            var mockCourseRepository = new MockCourseRepository();
+            mockCourseRepository.GetIncludingProfessorsStudents(courseId, new Course
             {
                 Students = new List<Student>(),
                 Credits = 2
-            };
-            var mockCourseRepository = new Mock<ICourseRepository>();
-            mockCourseRepository.Setup(x => x.GetIncludingProfessorsStudents(It.Is<long>(s => s == courseId))).Returns(mockCourse);
+            });
 
             var mockStudent = new Student
             {
@@ -44,10 +41,8 @@ namespace EpicUniversity.Test
                     }
                 }
             };
-            var mockStudentRepository = new Mock<IStudentRepository>();
-            mockStudentRepository.Setup(x => x.GetIncludingCourses(It.Is<long>(s => s == studentId))).Returns(mockStudent);
-            mockStudentRepository.Setup(x => x.Update(It.IsAny<Student>()));
-            mockStudentRepository.Setup(x => x.SaveChanges());
+            var mockStudentRepository = new MockStudentRepository();
+            mockStudentRepository.GetIncludingCourses(studentId, mockStudent);
 
             // ACT
             var enrollmentService = new EnrollmentService(mockCourseRepository.Object, mockStudentRepository.Object);
@@ -69,13 +64,12 @@ namespace EpicUniversity.Test
             var studentId = 1;
 
             // Course to enroll in
-            var mockCourse = new Course
+            var mockCourseRepository = new MockCourseRepository();
+            mockCourseRepository.GetIncludingProfessorsStudents(courseId, new Course
             {
                 Students = new List<Student>(),
                 Credits = courseCredits
-            };
-            var mockCourseRepository = new Mock<ICourseRepository>();
-            mockCourseRepository.Setup(x => x.GetIncludingProfessorsStudents(It.Is<long>(s => s == courseId))).Returns(mockCourse);
+            });
 
             var mockStudent = new Student
             {
@@ -87,10 +81,8 @@ namespace EpicUniversity.Test
                     }
                 }
             };
-            var mockStudentRepository = new Mock<IStudentRepository>();
-            mockStudentRepository.Setup(x => x.GetIncludingCourses(It.Is<long>(s => s == studentId))).Returns(mockStudent);
-            mockStudentRepository.Setup(x => x.Update(It.IsAny<Student>()));
-            mockStudentRepository.Setup(x => x.SaveChanges());
+            var mockStudentRepository = new MockStudentRepository();
+            mockStudentRepository.GetIncludingCourses(studentId, mockStudent);
 
             // ACT
             var enrollmentService = new EnrollmentService(mockCourseRepository.Object, mockStudentRepository.Object);
